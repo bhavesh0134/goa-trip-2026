@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nagpur to Goa — Budget Trip 2026</title>
+<style>
+  :root {
+    --sea: #0077b6;
+    --sand: #f4a261;
+    --green: #2d6a4f;
+    --light: #f8f9fa;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6c757d;
+    --border: #e9ecef;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: var(--text); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #023e8a 0%, #0096c7 50%, #48cae4 100%);
+    color: white; text-align: center; padding: 48px 20px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '🌊'; font-size: 200px; position: absolute;
+    opacity: 0.06; top: -30px; left: -40px; transform: rotate(-20deg);
+  }
+  .hero::after {
+    content: '🌴'; font-size: 160px; position: absolute;
+    opacity: 0.08; bottom: -20px; right: -20px;
+  }
+  .hero h1 { font-size: clamp(1.6rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -0.5px; }
+  .hero .subtitle { font-size: clamp(1rem, 3vw, 1.25rem); margin-top: 8px; opacity: 0.9; }
+  .hero .badge {
+    display: inline-block; background: var(--sand); color: #1a1a2e;
+    font-weight: 700; border-radius: 50px; padding: 6px 20px;
+    margin-top: 16px; font-size: 1rem;
+  }
+
+  /* TABS */
+  .tabs { display: flex; gap: 8px; overflow-x: auto; padding: 20px 16px 0;
+    max-width: 900px; margin: 0 auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0; padding: 10px 18px; border-radius: 50px; border: 2px solid var(--sea);
+    background: white; color: var(--sea); font-weight: 600; cursor: pointer;
+    font-size: 0.85rem; transition: all 0.2s;
+  }
+  .tab.active, .tab:hover { background: var(--sea); color: white; }
+
+  /* CONTENT */
+  .content { max-width: 900px; margin: 0 auto; padding: 16px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--card); border-radius: 16px; padding: 20px;
+    margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border-left: 4px solid var(--sea);
+  }
+  .card.green { border-left-color: var(--green); }
+  .card.sand { border-left-color: var(--sand); }
+  .card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; color: var(--sea); }
+  .card.green h2 { color: var(--green); }
+  .card.sand h2 { color: #c77226; }
+
+  /* OVERVIEW TABLE */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .info-item { background: #f0f4f8; border-radius: 10px; padding: 12px; }
+  .info-item .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 600; }
+  .info-item .value { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-top: 2px; }
+  @media(max-width:480px){ .info-grid { grid-template-columns: 1fr 1fr; } }
+
+  /* DAY CARDS */
+  .day-header {
+    background: linear-gradient(135deg, var(--sea), #48cae4);
+    color: white; border-radius: 14px; padding: 16px 20px;
+    margin-bottom: 12px; cursor: pointer; display: flex;
+    justify-content: space-between; align-items: center;
+    box-shadow: 0 4px 15px rgba(0,119,182,0.3);
+  }
+  .day-header h3 { font-size: 1rem; font-weight: 700; }
+  .day-header .day-meta { font-size: 0.8rem; opacity: 0.85; margin-top: 2px; }
+  .day-header .chevron { font-size: 1.2rem; transition: transform 0.3s; }
+  .day-header.open .chevron { transform: rotate(180deg); }
+  .day-body { display: none; }
+  .day-body.open { display: block; }
+
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ''; position: absolute; left: 9px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; }
+  .tl-item { position: relative; margin-bottom: 16px; }
+  .tl-dot {
+    position: absolute; left: -24px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--sea); border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--sea);
+  }
+  .tl-time { font-size: 0.72rem; font-weight: 700; color: var(--sea); text-transform: uppercase; }
+  .tl-text { font-size: 0.9rem; color: var(--text); margin-top: 2px; line-height: 1.5; }
+  .tl-text strong { color: var(--sea); }
+  .tl-tip { font-size: 0.78rem; color: var(--muted); margin-top: 4px; font-style: italic; }
+
+  .day-spend {
+    background: #e8f5e9; border-radius: 10px; padding: 10px 14px;
+    margin-top: 8px; font-size: 0.85rem; font-weight: 700; color: var(--green);
+  }
+
+  /* BUDGET TABLE */
+  .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .budget-table th { background: var(--sea); color: white; padding: 10px 12px; text-align: left; }
+  .budget-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .budget-table tr:last-child td { font-weight: 700; background: #e8f4fd; }
+  .budget-table tr:hover td { background: #f8f9fa; }
+  .budget-table .total-row td { background: #0077b6; color: white; font-size: 1rem; }
+
+  /* PACKING */
+  .pack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:480px){ .pack-grid { grid-template-columns: 1fr; } }
+  .pack-cat h4 { font-size: 0.85rem; font-weight: 700; color: var(--sea); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .pack-cat ul { list-style: none; }
+  .pack-cat li { font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid #f0f0f0; color: var(--text); }
+  .pack-cat li::before { content: '✓ '; color: var(--green); font-weight: 700; }
+
+  /* TIPS */
+  .tip-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .tip-num { flex-shrink: 0; width: 28px; height: 28px; background: var(--sea); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 800; }
+  .tip-text { font-size: 0.88rem; line-height: 1.5; }
+
+  /* TRANSPORT */
+  .train-card { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+  .train-card .route { font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; }
+  .train-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .train-info { font-size: 0.82rem; opacity: 0.8; }
+  .train-info strong { opacity: 1; color: #48cae4; }
+  .fare-badge { background: var(--sand); color: #1a1a2e; border-radius: 8px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; }
+  .local-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .local-icon { font-size: 1.5rem; }
+  .local-text { font-size: 0.88rem; }
+  .local-text strong { display: block; font-weight: 700; }
+
+  /* NOTICE */
+  .notice { background: #fff3cd; border: 1px solid #ffc107; border-radius: 10px; padding: 14px; margin-bottom: 12px; font-size: 0.85rem; }
+  .notice strong { color: #856404; }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 30px 16px; color: var(--muted); font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero h1">🏖️ Nagpur → Goa</div>
+  <h1>Budget Trip Itinerary</h1>
+  <div class="subtitle">June 8–14, 2026 &nbsp;·&nbsp; 7 Days / 6 Nights</div>
+  <div class="badge">₹7,500–₹9,000 per person</div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" onclick="showTab('overview')">📋 Overview</button>
+  <button class="tab" onclick="showTab('transport')">🚆 Transport</button>
+  <button class="tab" onclick="showTab('itinerary')">📅 Day-by-Day</button>
+  <button class="tab" onclick="showTab('budget')">💰 Budget</button>
+  <button class="tab" onclick="showTab('packing')">🎒 Packing</button>
+  <button class="tab" onclick="showTab('tips')">💡 Tips</button>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div class="section active" id="overview">
+    <div class="card">
+      <h2>Trip Summary</h2>
+      <div class="info-grid">
+        <div class="info-item"><div class="label">From</div><div class="value">Nagpur, MH</div></div>
+        <div class="info-item"><div class="label">To</div><div class="value">Goa (N + S)</div></div>
+        <div class="info-item"><div class="label">Duration</div><div class="value">7 Days / 6 Nights</div></div>
+        <div class="info-item"><div class="label">Travel Mode</div><div class="value">Train</div></div>
+        <div class="info-item"><div class="label">Dates</div><div class="value">Jun 8–14, 2026</div></div>
+        <div class="info-item"><div class="label">Budget/Person</div><div class="value">₹7,500–₹9,000</div></div>
+      </div>
+    </div>
+
+    <div class="card green">
+      <h2>🏠 Accommodation Plan</h2>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">Night 1 · Jun 8</div><div class="tl-text"><strong>On Train</strong> — Overnight journey to Goa</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">Nights 2–4 · Jun 9–11</div><div class="tl-text"><strong>North Goa</strong> — Calangute / Anjuna hostel dorm<br><span style="color:var(--muted);font-size:0.82rem">Zostel / Backpacker Panda: ₹400–₹600/bed</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">Nights 5–6 · Jun 12–13</div><div class="tl-text"><strong>South Goa</strong> — Palolem beach hut<br><span style="color:var(--muted);font-size:0.82rem">Beach huts / guesthouses: ₹500–₹800/night</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">Night 7 · Jun 14</div><div class="tl-text"><strong>On Train</strong> — Overnight return to Nagpur</div></div>
+      </div>
+    </div>
+
+    <div class="notice">
+      <strong>⚠️ June = Monsoon Season</strong><br>
+      Pack a rain jacket. Some water sports may be restricted. Sea can be rough — check lifeguard flags. Upside: 30–40% cheaper prices and stunning lush greenery!
+    </div>
+  </div>
+
+  <!-- TRANSPORT -->
+  <div class="section" id="transport">
+    <div class="train-card">
+      <div class="route">🚆 Nagpur → Goa (Onward)</div>
+      <div class="train-row">
+        <div class="train-info">Train No. <strong>12779 / 18029</strong><br>Nagpur – Vasco-da-Gama Express</div>
+        <div class="fare-badge">₹450–₹600 Sleeper</div>
+      </div>
+      <div class="train-info" style="margin-top:8px">📅 <strong>Jun 8 (Mon)</strong> ~06:00 AM depart · Arrive <strong>Jun 9 ~08:00 AM</strong> at Madgaon/Vasco</div>
+      <div class="train-info" style="margin-top:6px">⏱ Duration: ~26–28 hours &nbsp;|&nbsp; 3AC: ₹1,200–₹1,500</div>
+    </div>
+
+    <div class="train-card">
+      <div class="route">🚆 Goa → Nagpur (Return)</div>
+      <div class="train-row">
+        <div class="train-info">Same route reverse<br>Vasco/Madgaon → Nagpur</div>
+        <div class="fare-badge">₹450–₹600 Sleeper</div>
+      </div>
+      <div class="train-info" style="margin-top:8px">📅 <strong>Jun 14 (Sun)</strong> ~10:00 PM depart · Arrive <strong>Jun 15 ~01:00 PM</strong> Nagpur</div>
+    </div>
+
+    <div class="card">
+      <h2>🛵 Local Transport in Goa</h2>
+      <div class="local-item">
+        <div class="local-icon">🛵</div>
+        <div class="local-text"><strong>Rent a Scooter/Activa — Best Option!</strong>₹350–₹500/day from shops near beach or hostel. Carry your driving license (mandatory).</div>
+      </div>
+      <div class="local-item">
+        <div class="local-icon">⛽</div>
+        <div class="local-text"><strong>Petrol</strong>~₹100–₹120/day</div>
+      </div>
+      <div class="local-item">
+        <div class="local-icon">🚌</div>
+        <div class="local-text"><strong>Local Buses</strong>Cheapest option — ₹20–₹60 per ride. Covers major routes between towns.</div>
+      </div>
+      <div class="local-item" style="border:none">
+        <div class="local-icon">📱</div>
+        <div class="local-text"><strong>Goa Miles App</strong>For local taxi bookings when needed.</div>
+      </div>
+    </div>
+
+    <div class="card sand">
+      <h2>📌 Booking Tips</h2>
+      <div class="tl-text">• Book train tickets <strong>30–45 days in advance</strong> on IRCTC — June is peak/tatkal season<br><br>• Use <strong>IRCTC Rail Connect app</strong> or www.irctc.co.in<br><br>• Sleeper class is comfortable for this route and saves ₹600–₹900 vs 3AC</div>
+    </div>
+  </div>
+
+  <!-- ITINERARY -->
+  <div class="section" id="itinerary">
+
+    <div class="day-header active" onclick="toggleDay(this)">
+      <div><h3>Day 1 — Monday, June 8</h3><div class="day-meta">🚆 Departure from Nagpur</div></div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body open">
+      <div class="card"><div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">04:00 AM</div><div class="tl-text">Wake up, pack bag (30–40L backpack recommended)<br><span class="tl-tip">Essentials: sunscreen, rain jacket, medicines, ID proof, light clothes</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">05:00 AM</div><div class="tl-text">Leave for <strong>Dr. Ambedkar Nagpur Railway Station</strong><br><span class="tl-tip">Auto/Cab: ₹80–₹150</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">05:30 AM</div><div class="tl-text">Arrive station — Chai + Poha at stalls: ₹30–₹40<br>Collect e-ticket</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">06:00 AM</div><div class="tl-text">🚆 <strong>TRAIN DEPARTS</strong> — Nagpur → Vasco/Madgaon</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">07:00 AM – 12:00 PM</div><div class="tl-text">Morning journey through Vidarbha countryside<br><span class="tl-tip">Carry own snacks (mathri, biscuits, dry fruits) — saves ₹150–₹200 vs pantry</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">12:00 PM</div><div class="tl-text">Lunch — pantry car or station meal: ₹60–₹100</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">06:00 PM</div><div class="tl-text">Konkan Railway begins 🏔️<br><span class="tl-tip">Beautiful ghats, tunnels, rivers — keep camera ready!</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">09:00 PM</div><div class="tl-text">Dinner at station halt: ₹70–₹120 → Sleep</div></div>
+      </div>
+      <div class="day-spend">💸 Day 1 Spend: ~₹300–₹450</div></div>
+    </div>
+
+    <div class="day-header" onclick="toggleDay(this)">
+      <div><h3>Day 2 — Tuesday, June 9</h3><div class="day-meta">🏖️ Arrive Goa + North Goa Beaches</div></div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="card"><div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">08:00–08:30 AM</div><div class="tl-text">🚉 <strong>ARRIVE Madgaon / Vasco Station</strong><br>Local bus to Calangute area: ₹40–₹80</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">09:00 AM</div><div class="tl-text">Check in to hostel, freshen up<br>Breakfast — South Indian Idli/Dosa: ₹60–₹80</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">10:30 AM</div><div class="tl-text">🛵 <strong>Rent Scooter</strong> ₹400 + fuel ₹100</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">11:00 AM</div><div class="tl-text">🏖️ <strong>Calangute Beach</strong> — most popular, lively<br><span class="tl-tip">Avoid beach shack food — just enjoy the beach</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">12:30 PM</div><div class="tl-text">🏖️ <strong>Baga Beach</strong> — flea market area, window shopping</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">01:00 PM</div><div class="tl-text">🍽️ <strong>Lunch</strong> at local restaurant (not beach shack!)<br>Fish Thali: ₹120–₹180 | Goan Chicken Curry: ₹100–₹150<br><span class="tl-tip">Try Infantaria Bakery or local dhabas near Baga road</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">03:30 PM</div><div class="tl-text">🏖️ <strong>Anjuna Beach</strong> — rocky, scenic, hippie vibe. Great photography.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">05:00 PM</div><div class="tl-text">🏯 <strong>Chapora Fort</strong> — the "Dil Chahta Hai" fort! FREE entry<br><span class="tl-tip">Arrive by 5:30 PM for sunset views over Chapora River — one of the BEST free experiences!</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">08:00 PM</div><div class="tl-text">🍽️ <strong>Dinner</strong> near Anjuna — Goan Fish Curry: ₹150–₹200<br><span class="tl-tip">Beer (Kingfisher): ₹80–₹100 optional</span></div></div>
+      </div>
+      <div class="day-spend">💸 Day 2 Spend: ₹900–₹1,200</div></div>
+    </div>
+
+    <div class="day-header" onclick="toggleDay(this)">
+      <div><h3>Day 3 — Wednesday, June 10</h3><div class="day-meta">🌊 North Goa Deep Dive</div></div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="card"><div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">07:30 AM</div><div class="tl-text">🌅 <strong>Sunrise at Vagator Beach</strong> — dramatic red cliffs. FREE & stunning.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">08:30 AM</div><div class="tl-text">Breakfast near Vagator — Egg bhurji + Pav: ₹50–₹70</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">10:00 AM</div><div class="tl-text">🛍️ <strong>Anjuna Flea Market / Wednesday Market</strong><br>Fridge magnets ₹30–₹50 | Cashews ₹200/500g | Spice packs ₹80–₹100<br><span class="tl-tip">Bargain at 50–60% of asking price</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">12:00 PM</div><div class="tl-text">🏖️ <strong>Morjim Beach</strong> — quiet turtle nesting beach, clean & less touristy</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">01:00 PM</div><div class="tl-text">🍽️ Lunch at Morjim road stalls — Seafood Thali: ₹150–₹200</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">02:30 PM</div><div class="tl-text">🏊 <strong>Arambol Beach</strong> — hippie, laid-back, beautiful lagoon<br><span class="tl-tip">Swim in the sweet water lake inside Arambol — unique and FREE! Walk to headland for views.</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">05:30 PM</div><div class="tl-text">🏛️ <strong>St. Augustine Tower Ruins</strong> — Old Goa, UNESCO Heritage. FREE.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">07:30 PM</div><div class="tl-text">🍽️ <strong>Dinner at Panjim's 18th June Road</strong> — best local food street in Goa<br>Prawn rechad, Bebinca, Ros Omelette: ₹120–₹180</div></div>
+      </div>
+      <div class="day-spend">💸 Day 3 Spend: ₹800–₹1,100</div></div>
+    </div>
+
+    <div class="day-header" onclick="toggleDay(this)">
+      <div><h3>Day 4 — Thursday, June 11</h3><div class="day-meta">⛪ Old Goa + Panjim Heritage</div></div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="card"><div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">09:30 AM</div><div class="tl-text">⛪ <strong>Basilica of Bom Jesus</strong> — UNESCO Heritage, mortal remains of St. Francis Xavier. FREE.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">11:30 AM</div><div class="tl-text">⛪ <strong>Se Cathedral</strong> — largest church in Asia (2 min walk). FREE.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">12:30 PM</div><div class="tl-text">⛪ <strong>Church of St. Cajetan</strong> — baroque architecture. FREE.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">01:00 PM</div><div class="tl-text">🍽️ Lunch at local dhaba: ₹80–₹120</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">02:30 PM</div><div class="tl-text">🏘️ <strong>Fontainhas — Latin Quarter of Panjim</strong><br>India's only Latin Quarter — colorful Portuguese-era houses, street art, quaint cafes. FREE stroll!<br><span class="tl-tip">Coffee at small cafe: ₹40–₹60</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">05:00 PM</div><div class="tl-text">🚢 <strong>Mandovi River Cruise</strong> (optional) — ₹150–₹200<br>Cultural show, departs Santa Monica Jetty</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">06:30 PM</div><div class="tl-text">🛕 <strong>Mahalaxmi Temple, Panjim</strong> — important local temple. FREE.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">08:00 PM</div><div class="tl-text">🍽️ <strong>Dinner at Viva Panjim</strong> or Sher-e-Punjab (budget)<br>Chicken Xacuti / Prawn Curry: ₹140–₹200</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">10:00 PM</div><div class="tl-text">Pack bags — moving to South Goa tomorrow!</div></div>
+      </div>
+      <div class="day-spend">💸 Day 4 Spend: ₹700–₹900</div></div>
+    </div>
+
+    <div class="day-header" onclick="toggleDay(this)">
+      <div><h3>Day 5 — Friday, June 12</h3><div class="day-meta">🚌 Move to South Goa + Palolem</div></div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="card"><div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">08:30 AM</div><div class="tl-text">🚌 <strong>Bus: North Goa → Margao → Palolem</strong><br>Panjim/Mapusa → Margao: ₹30–₹60 | Margao → Palolem: ₹25–₹40</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">10:30 AM</div><div class="tl-text">🏖️ <strong>Arrive Palolem Beach</strong> — check in beach hut: ₹500–₹800/night</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">11:30 AM</div><div class="tl-text">🏖️ <strong>Palolem Beach</strong> — crescent-shaped paradise, crystal clear water<br>Kayaking: ₹200–₹300/hr (optional)</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">01:00 PM</div><div class="tl-text">🍽️ <strong>Lunch at beach shack</strong> — Fish Thali / Tuna Steak: ₹150–₹220</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">02:30 PM</div><div class="tl-text">🦋 <strong>Butterfly Beach</strong> — pristine hidden beach<br><span class="tl-tip">Boat from Palolem: ₹100–₹150 OR free 45-min forest trek (recommended!)</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">05:00 PM</div><div class="tl-text">🏖️ <strong>Agonda Beach</strong> — quiet, olive ridley turtle nesting beach<br>Perfect for evening walk and sunset</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">08:00 PM</div><div class="tl-text">🍽️ <strong>Dinner in Palolem village</strong> — Goan Sausage Pulao + Kokum Drink: ₹150–₹200<br><span class="tl-tip">Try Bombay Restaurant or Magic Italy near beach road</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">10:00 PM</div><div class="tl-text">Evening walk on lit-up Palolem Beach 🌙</div></div>
+      </div>
+      <div class="day-spend">💸 Day 5 Spend: ₹900–₹1,200</div></div>
+    </div>
+
+    <div class="day-header" onclick="toggleDay(this)">
+      <div><h3>Day 6 — Saturday, June 13</h3><div class="day-meta">🐬 South Goa Exploration</div></div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="card"><div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">06:30 AM</div><div class="tl-text">🐬 <strong>Dolphin Spotting Boat</strong> — book the evening prior<br>₹300–₹400/person · 1 hour · See Irrawaddy dolphins in the wild!</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">08:00 AM</div><div class="tl-text">Breakfast — Goan Bread (Poi) with butter + jam: ₹30<br>Beach café: ₹80–₹100</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">09:30 AM</div><div class="tl-text">🌿 <strong>Cotigao Wildlife Sanctuary</strong> (30 km from Palolem)<br>Entry: ₹30 | Spot deer, wild boar, crocodiles, birds. Off-tourist-trail gem!</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">11:00 AM</div><div class="tl-text">🏯 <strong>Cabo de Rama Fort</strong> — scenic cliff-top Portuguese fort. FREE.<br>Spectacular Arabian Sea views!</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">01:00 PM</div><div class="tl-text">🍽️ Lunch at Canacona town market: ₹80–₹120</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">02:30 PM</div><div class="tl-text">🏖️ <strong>Colomb Bay</strong> — hidden bay, 10-min walk from Palolem (past the rocks)<br>FREE, usually uncrowded, ideal for swimming</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">08:30 PM</div><div class="tl-text">🍽️ <strong>FAREWELL DINNER</strong> at Palolem beach shack 🎉<br>Prawn masala + Goan fish curry + Rice: ₹200–₹300</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">11:00 PM</div><div class="tl-text">Head to Madgaon Station — auto/cab: ₹200–₹300</div></div>
+      </div>
+      <div class="day-spend">💸 Day 6 Spend: ₹900–₹1,200</div></div>
+    </div>
+
+    <div class="day-header" onclick="toggleDay(this)">
+      <div><h3>Day 7 — Sunday, June 14</h3><div class="day-meta">🚆 Departure — Return to Nagpur</div></div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="card"><div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">~10:00–11:00 PM</div><div class="tl-text">🚉 <strong>TRAIN DEPARTS from Madgaon</strong> — overnight return to Nagpur<br><span class="tl-tip">Carry dinner/snacks from Palolem — saves ₹150–₹200</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">Jun 15, ~01:00 PM</div><div class="tl-text">🎉 <strong>ARRIVE NAGPUR</strong> — Trip complete!<br>Auto home: ₹80–₹150</div></div>
+      </div></div>
+    </div>
+
+  </div>
+
+  <!-- BUDGET -->
+  <div class="section" id="budget">
+    <div class="card">
+      <h2>🚆 Transport</h2>
+      <table class="budget-table">
+        <tr><th>Item</th><th>Cost/Person</th></tr>
+        <tr><td>Train Nagpur → Goa (Sleeper)</td><td>₹500–₹600</td></tr>
+        <tr><td>Train Goa → Nagpur (Sleeper)</td><td>₹500–₹600</td></tr>
+        <tr><td>Local buses within Goa (5 days)</td><td>₹200–₹300</td></tr>
+        <tr><td>Scooter rent (5 days × ₹400)</td><td>₹2,000</td></tr>
+        <tr><td>Petrol (5 days × ₹100)</td><td>₹500</td></tr>
+        <tr><td>Auto/cab (station transfers)</td><td>₹300–₹400</td></tr>
+        <tr><td><strong>Transport Total</strong></td><td><strong>₹4,000–₹4,500</strong></td></tr>
+      </table>
+    </div>
+
+    <div class="card green">
+      <h2>🏨 Accommodation</h2>
+      <table class="budget-table">
+        <tr><th>Item</th><th>Cost/Person</th></tr>
+        <tr><td>North Goa hostel dorm (3 nights × ₹500)</td><td>₹1,500</td></tr>
+        <tr><td>South Goa beach hut (2 nights × ₹600)</td><td>₹1,200</td></tr>
+        <tr><td><strong>Accommodation Total</strong></td><td><strong>₹2,700</strong></td></tr>
+      </table>
+    </div>
+
+    <div class="card sand">
+      <h2>🍽️ Food (7 days)</h2>
+      <table class="budget-table">
+        <tr><th>Item</th><th>Cost</th></tr>
+        <tr><td>Breakfast (₹70 avg × 6 days)</td><td>₹420</td></tr>
+        <tr><td>Lunch (₹150 avg × 7 days)</td><td>₹1,050</td></tr>
+        <tr><td>Dinner (₹180 avg × 7 days)</td><td>₹1,260</td></tr>
+        <tr><td>Train food (2 days × ₹200)</td><td>₹400</td></tr>
+        <tr><td><strong>Food Total</strong></td><td><strong>₹3,130</strong></td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>🎯 Activities & Shopping</h2>
+      <table class="budget-table">
+        <tr><th>Item</th><th>Cost</th></tr>
+        <tr><td>Chapora Fort</td><td>FREE</td></tr>
+        <tr><td>Basilica of Bom Jesus</td><td>FREE</td></tr>
+        <tr><td>Fontainhas walk</td><td>FREE</td></tr>
+        <tr><td>Butterfly Beach trek</td><td>FREE</td></tr>
+        <tr><td>Dolphin Spotting Boat</td><td>₹350</td></tr>
+        <tr><td>Cotigao Wildlife Sanctuary</td><td>₹30</td></tr>
+        <tr><td>Mandovi River Cruise (optional)</td><td>₹200</td></tr>
+        <tr><td>Miscellaneous</td><td>₹200</td></tr>
+        <tr><td>Cashews, spices, souvenirs</td><td>₹500</td></tr>
+        <tr><td><strong>Activities + Shopping Total</strong></td><td><strong>₹1,280</strong></td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-left-color:#c0392b">
+      <h2>🧾 Grand Total</h2>
+      <table class="budget-table">
+        <tr><th>Category</th><th>Budget</th></tr>
+        <tr><td>Transport</td><td>₹4,000–₹4,500</td></tr>
+        <tr><td>Accommodation</td><td>₹2,700</td></tr>
+        <tr><td>Food</td><td>₹3,130</td></tr>
+        <tr><td>Activities + Shopping</td><td>₹1,280</td></tr>
+        <tr class="total-row"><td><strong>GRAND TOTAL</strong></td><td><strong>₹11,110–₹11,610</strong></td></tr>
+      </table>
+      <div style="margin-top:14px;background:#e8f5e9;border-radius:10px;padding:12px;font-size:0.88rem;color:#2d6a4f;font-weight:600">
+        💡 Sharing scooter + room with a friend? Divide costs → <strong>~₹7,500–₹9,000 per person!</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- PACKING -->
+  <div class="section" id="packing">
+    <div class="card">
+      <h2>🎒 Packing List</h2>
+      <div class="pack-grid">
+        <div class="pack-cat">
+          <h4>👕 Clothes</h4>
+          <ul>
+            <li>3–4 light cotton t-shirts</li>
+            <li>2 shorts / light trousers</li>
+            <li>1 pair of jeans</li>
+            <li>Swimwear</li>
+            <li>Light rain jacket / poncho</li>
+            <li>Walking sandals + slippers</li>
+            <li>Undergarments + socks</li>
+          </ul>
+        </div>
+        <div class="pack-cat">
+          <h4>📄 Documents</h4>
+          <ul>
+            <li>Aadhaar Card (mandatory)</li>
+            <li>Driving License</li>
+            <li>IRCTC e-ticket printout</li>
+            <li>IRCTC app on phone</li>
+            <li>Google Maps offline</li>
+          </ul>
+        </div>
+        <div class="pack-cat">
+          <h4>🧴 Toiletries</h4>
+          <ul>
+            <li>Sunscreen SPF 50+</li>
+            <li>Moisturizer, lip balm</li>
+            <li>Insect repellent</li>
+            <li>ORS packets</li>
+            <li>Antacids, pain balm</li>
+            <li>Band-aids, Dettol</li>
+          </ul>
+        </div>
+        <div class="pack-cat">
+          <h4>📱 Electronics</h4>
+          <ul>
+            <li>Phone + charger</li>
+            <li>Power bank 5000–10000 mAh</li>
+            <li>Earphones</li>
+            <li>Waterproof phone cover</li>
+          </ul>
+        </div>
+        <div class="pack-cat">
+          <h4>🎽 Misc Essentials</h4>
+          <ul>
+            <li>Reusable water bottle</li>
+            <li>30–40L backpack</li>
+            <li>Ziplock bags (for beach)</li>
+            <li>Cash ₹3,000–₹4,000</li>
+            <li>Snacks from Nagpur</li>
+          </ul>
+        </div>
+        <div class="pack-cat">
+          <h4>📞 Useful Apps</h4>
+          <ul>
+            <li>IRCTC Rail Connect</li>
+            <li>Goa Miles (taxi)</li>
+            <li>Google Maps</li>
+            <li>MakeMyTrip</li>
+            <li>Zostel app</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="section" id="tips">
+    <div class="card">
+      <h2>💡 12 Money-Saving Pro Tips</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Travel Sleeper class</strong> — saves ₹600–₹900 vs 3AC, perfectly comfortable for budget travel</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Rent a scooter</strong> instead of autos/cabs — most economical way to explore Goa</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Eat at local dhabas</strong>, not beach shacks — same food, 40–50% cheaper</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Stay in hostel dorms</strong> — meet fellow travelers, share scooter costs</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Carry train snacks from Nagpur</strong> — Nagpur oranges, local chivda, saves ₹200+</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Shop at Mapusa/Anjuna Market</strong> — avoid beach-front shops (expensive)</div></div>
+      <div class="tip-item"><div class="tip-num">7</div><div class="tip-text"><strong>Free beaches are the best beaches</strong> — Vagator, Agonda, Arambol, Butterfly Beach all free</div></div>
+      <div class="tip-item"><div class="tip-num">8</div><div class="tip-text"><strong>Book train tickets ASAP</strong> — June is peak/tatkal season. Book 30–45 days ahead.</div></div>
+      <div class="tip-item"><div class="tip-num">9</div><div class="tip-text"><strong>Avoid taxis from station</strong> — take local bus or pre-booked local autos</div></div>
+      <div class="tip-item"><div class="tip-num">10</div><div class="tip-text"><strong>Carry a refillable bottle</strong> — save money and the environment</div></div>
+      <div class="tip-item"><div class="tip-num">11</div><div class="tip-text"><strong>Carry sufficient cash from Nagpur</strong> — many small shops/beaches are cash only</div></div>
+      <div class="tip-item"><div class="tip-num">12</div><div class="tip-text"><strong>June = Monsoon discounts!</strong> — 30–40% cheaper than peak season. Lush green Goa is magical.</div></div>
+    </div>
+
+    <div class="notice">
+      <strong>⚠️ June Travel Notes</strong><br><br>
+      🌧️ <strong>Heavy rainfall</strong> — rain jacket mandatory<br>
+      🌊 <strong>Rough seas</strong> — always check beach flags and lifeguard advisories<br>
+      🤿 <strong>Water sports</strong> — many operators close in June. Plan sightseeing-heavy itinerary.<br>
+      💚 <strong>Lush Goa</strong> — waterfalls, green hills, fewer crowds = magical experience<br>
+      🦟 <strong>Health</strong> — carry mosquito repellent + stomach meds. Drink bottled/filtered water only.
+    </div>
+
+    <div class="card green">
+      <h2>📞 Emergency Contacts</h2>
+      <div style="font-size:0.88rem;line-height:2">
+        🚨 <strong>Emergency:</strong> 112<br>
+        👮 <strong>Goa Police:</strong> 100<br>
+        🏥 <strong>Ambulance:</strong> 108<br>
+        🌐 <strong>Goa Tourism:</strong> goatourism.gov.in<br>
+        🚆 <strong>Train Booking:</strong> irctc.co.in
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Itinerary prepared for June 2026 · Budget figures approximate<br>
+  Happy Travelling! Enjoy Goa on a budget! 🌴🏖️
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+  function toggleDay(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    header.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+  }
+  // Open first day by default
+  document.querySelector('.day-header').classList.add('open');
+</script>
+</body>
+</html>
